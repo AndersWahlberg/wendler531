@@ -1,14 +1,14 @@
 package fi.utu.wendler531.app;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
 
 public class UserProfile {
     private String name;
     private List<BodyWeightEntry> bodyWeightHistory;
     private double heightCm;
     private Integer birthYear;
-
 
     public UserProfile() {
         this.bodyWeightHistory = new ArrayList<>();
@@ -26,6 +26,7 @@ public class UserProfile {
         return !bodyWeightHistory.isEmpty();
     }
 
+    
     public BodyWeightEntry getLatestBodyWeightEntry() {
         if (bodyWeightHistory.isEmpty()) {
             throw new IllegalStateException("Käyttäjällä ei ole painohistoriaa.");
@@ -40,6 +41,7 @@ public class UserProfile {
     public double getHeightCm() {
         return heightCm;
     }
+
     public void setHeightCm(double heightCm) {
         if (heightCm <= 0) {
             throw new IllegalArgumentException("Pituus senttimetreinä on oltava positiivinen luku.");
@@ -50,6 +52,7 @@ public class UserProfile {
         }
         this.heightCm = heightCm;
     }
+
     public void addBodyWeightEntry(double weightKg) {
         if (weightKg <= 0) {
             throw new IllegalArgumentException("Paino kilogrammoina on oltava positiivinen luku.");
@@ -71,11 +74,9 @@ public class UserProfile {
             if (birthYear < 1900 || birthYear > currentYear) {
                 throw new IllegalArgumentException("Syntymävuosi on oltava välillä 1900 - " + currentYear);
             }
-
         }
         this.birthYear = birthYear;
     }
-
 
     public double calculateBmi() {
         if (heightCm <= 0) {
@@ -88,11 +89,15 @@ public class UserProfile {
         double heightM = heightCm / 100.0;
         double latestWeightKg = bodyWeightHistory.get(bodyWeightHistory.size() - 1).getWeightKg();
         return latestWeightKg / (heightM * heightM);
-}
+    }
 
     public static class BodyWeightEntry {
         private LocalDate date;
         private double weightKg;
+
+        public BodyWeightEntry() {
+            // Parametriton konstruktori JSON-serialisointia varten (esim. Gson)
+        }
 
         public BodyWeightEntry(LocalDate date, double weightKg) {
             this.date = date;
@@ -107,5 +112,4 @@ public class UserProfile {
             return weightKg;
         }
     }
-
 }
