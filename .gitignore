@@ -1,6 +1,11 @@
 /target/
 *.log
 .DS_Store
+
 .idea/
 .vscode/
 *.iml
+*.code-workspace
+
+wendler531_data.json
+*.json.bak

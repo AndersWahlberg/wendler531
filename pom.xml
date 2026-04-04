@@ -18,14 +18,14 @@
   </properties>
 
   <dependencies>
-    <!-- JSON  -->
+    <!-- JSON library for persistence -->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>${gson.version}</version>
     </dependency>
 
-    <!-- JUnit 5: sisältää sekä API:n että enginen => testit myös ajetaan -->
+    <!-- JUnit 5 for unit testing -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -35,9 +35,13 @@
   </dependencies>
 
   <build>
+    <!-- Create a clearly named final JAR file -->
+    <finalName>${project.artifactId}-${project.version}</finalName>
+
     <plugins>
-      <!-- Kääntäjä -->
+      <!-- Compile the project with Java 17 -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.13.0</version>
         <configuration>
@@ -45,18 +49,17 @@
         </configuration>
       </plugin>
 
-      <!-- Testien ajo (JUnit 5) -->
+      <!-- Run unit tests with JUnit 5 -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.2.5</version>
         <configuration>
-          <!-- Windows + JPMS-jutut: -->
           <useModulePath>false</useModulePath>
-          <!-- Oletuspatternit: *Test, *Tests, *TestCase -->
         </configuration>
       </plugin>
 
-      <!-- Ohjelman ajaminen: mvn exec:java -->
+      <!-- Run the application with: mvn exec:java -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
@@ -66,7 +69,7 @@
         </configuration>
       </plugin>
 
-      <!-- Runnable "fat jar": mvn package => target/wendler531-1.0-SNAPSHOT.jar -->
+      <!-- Create an executable fat JAR that includes dependencies -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -78,7 +81,10 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <!-- Create only one final JAR instead of an extra shaded artifact -->
+              <shadedArtifactAttached>false</shadedArtifactAttached>
               <createDependencyReducedPom>false</createDependencyReducedPom>
+
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>fi.utu.wendler531.Main</mainClass>
@@ -89,7 +95,7 @@
         </executions>
       </plugin>
 
-        <!-- Javadoc -->
+      <!-- Generate JavaDoc documentation -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -99,6 +105,15 @@
           <encoding>${project.build.sourceEncoding}</encoding>
           <failOnError>false</failOnError>
         </configuration>
+        <executions>
+          <execution>
+            <id>generate-javadocs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

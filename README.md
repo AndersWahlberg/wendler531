@@ -1,95 +1,164 @@
-# Wendler 5/3/1 CLI tracker
+# Wendler 5/3/1 CLI Tracker
 
 A Java command-line application for tracking Wendler 5/3/1 training cycles.  
-Built as a course project (UTU TKO 7001), with a focus on clean OOP structure, testing, and persistence.
+This project was built as a course assignment for **UTU TKO_7001 / Olio-ohjelmoinnin perusteet**.
 
-## Current features (18.2.2026)
+The application focuses on:
+- object-oriented design
+- persistent data storage
+- unit testing
+- Maven-based build automation
+- a runnable JAR package
 
-- Console-based menu navigation (CLI)
-- Improved console output formatting (helper methods like `blankLine()`, `section(title)`, `pause()`)
-- Persistent app state (JSON):
-  - Loads saved state on startup
-  - Falls back to a default state if loading fails (missing/corrupt file)
-- User profile:
-  - Name and height
-  - Bodyweight history entries (date + weight)
-  - BMI calculation based on latest weight entry
-- Lift settings:
-  - Training max / 1RM related settings
-  - Rounding rules for set weights
-- Wendler 5/3/1 cycle support (4-week cycle):
-  - Week 1: 5s
-  - Week 2: 3s
-  - Week 3: 5/3/1
-  - Week 4: deload
-- Workout session logging
-- Workout history view
-- Unit tests (JUnit 5):
-  - Tests run successfully with `mvn clean test`
+## Features
 
-## Planned features
+- Console-based menu navigation
+- User profile management
+  - name
+  - height
+  - bodyweight history
+  - BMI calculation
+- Lift settings for main lifts
+  - one-rep max values
+  - training max percentage
+- Wendler 5/3/1 workout calculation
+  - warm-up sets
+  - main work sets
+  - week-based progression
+- Assistance exercise support
+- Workout logging and workout history
+- Estimated 1RM / PR tracking
+- Persistent save/load using JSON
+- Input validation so incorrect input does not crash the application
 
-- 1RM estimation via interface:
-  - `OneRepMaxEstimator` with at least two implementations (Epley, Brzycki)
+## Project structure
 
-## Tech stack
+The code is divided into clear responsibilities.
 
-- Java
+### Main classes
+
+- `Main`  
+  Starts the application.
+
+- `ConsoleUI`  
+  Handles the command-line user interface, menu navigation, and input handling.
+
+### Application logic
+
+- `AppState`  
+  Stores the current application state.
+
+- `LiftSettings`  
+  Stores lift-related settings such as one-rep max values and training max settings.
+
+- `WendlerProgramService`  
+  Calculates warm-up sets and main work sets for the Wendler 5/3/1 program.
+
+- `WorkoutHistoryService`  
+  Handles workout history logic.
+
+- `AssistanceService`  
+  Provides assistance exercise logic and default assistance exercise data.
+
+### Data model
+
+- `UserProfile`  
+  Stores user profile data such as name, height, and bodyweight history.
+
+- `WorkoutLogEntry`  
+  Represents a saved workout entry.
+
+- `SetPrescription`  
+  Represents a calculated set with weight and reps.
+
+- `AssistanceExercise`  
+  Represents an assistance exercise.
+
+### Estimation interface
+
+- `OneRepMaxEstimator`  
+  A self-defined interface for one-rep max estimation.
+
+- `EpleyEstimator`  
+  One implementation of the `OneRepMaxEstimator` interface.
+
+- `BrzyckiEstimator`  
+  Another implementation of the `OneRepMaxEstimator` interface.
+
+### Persistence
+
+- `SimpleJsonStorage`  
+  Loads and saves application data as JSON.
+
+## Course requirement highlights
+
+This project includes the following required course elements:
+
+- object-oriented class structure
+- minimal `main` method
+- a self-defined interface:
+  - `OneRepMaxEstimator`
+- two implementations of the interface:
+  - `EpleyEstimator`
+  - `BrzyckiEstimator`
+- file persistence
+- automated unit tests
+- JavaDoc comments and generated documentation
+- Maven build configuration
+- executable JAR packaging
+
+## Technologies
+
+- Java 17
 - Maven
+- Gson
 - JUnit 5
-- JSON persistence (Gson)
 
-## Running locally
+## Build and run
 
-“Running locally” means how to build, test, and run this project on your own computer (outside GitHub).  
-Run these commands in the project root folder (where `pom.xml` is located).
+Run tests:
 
-### Run tests
+```bash
+mvn test
+```
 
-Runs unit tests and verifies the code still works after changes.
+Build the project:
 
-- `mvn` = Maven build tool
-- `clean` = removes old build output (clears `target/`)
-- `test` = compiles what’s needed and runs JUnit tests
+```bash
+mvn package
+```
 
-Commands:
-- `mvn clean test`
+Run the packaged application:
 
-### Build a runnable JAR
+```bash
+java -jar target/wendler531-1.0-SNAPSHOT.jar
+```
 
-Compiles the project and packages it into a JAR file under `target/`.
+You can also run the application directly with Maven:
 
-- `package` = builds and packages the application (typically into a `.jar`)
+```bash
+mvn exec:java
+```
 
-Commands:
-- `mvn clean package`
+## Tests
 
-### Run
+The project includes tests for core functionality, including:
 
-Runs the packaged JAR produced by `mvn package`.
+- one-rep max estimation
+- Wendler set calculation
+- workout history logic
+- JSON storage behavior
 
-- Replace `<your-jar-name>.jar` with the actual file name created under `target/`
-  (example name might look like `wendler531-1.0-SNAPSHOT.jar` depending on your Maven config)
+## Persistence
 
-Commands:
-- `java -jar target/<your-jar-name>.jar`
+Application data is saved to JSON so that profile data, lift settings, estimator selection, assistance exercise data, and workout history can be loaded again between runs.
 
-## Notes
+## Example workflow
 
-This project aims to demonstrate a clean separation of responsibilities (Single Responsibility Principle):
-
-- UI (ConsoleUI) is responsible only for input/output:
-  - prints menus and messages
-  - reads user input
-  - displays results  
-  It should not contain core training logic or calculations.
-
-- Services contain the program logic:
-  - validations
-  - Wendler rules and calculations
-  - history handling
-  - feature workflows (“what happens when user selects X”)
-
-- Data models/state store the application data:
-  - user profile, bodyweight entries, app state, etc.
-  - JSON save/load reads/writes these models
+1. Start the program
+2. Create or update your profile
+3. Set one-rep max values for the main lifts
+4. Start a workout for a selected lift and week
+5. Enter completed reps
+6. View workout history
+7. Close the program and continue later with saved data

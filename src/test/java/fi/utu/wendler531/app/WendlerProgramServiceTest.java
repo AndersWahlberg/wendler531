@@ -6,6 +6,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for {@link WendlerProgramService}.
+ */
 class WendlerProgramServiceTest {
 
     private final WendlerProgramService service = new WendlerProgramService();
@@ -22,10 +25,10 @@ class WendlerProgramServiceTest {
 
     @Test
     void week1_weightsAreRoundedToNearest2p5() {
-        // TM 180, week1 percents: 65/75/85
-        // 180*0.65 = 117.0 -> 117.5 (nearest 2.5)
-        // 180*0.75 = 135.0 -> 135.0
-        // 180*0.85 = 153.0 -> 152.5 (nearest 2.5)
+        // Week 1 percentages with TM 180:
+        // 180 * 0.65 = 117.0 -> 117.5
+        // 180 * 0.75 = 135.0 -> 135.0
+        // 180 * 0.85 = 153.0 -> 152.5
         List<SetPrescription> sets = service.getMainWorkSets(180.0, 1);
 
         assertEquals(117.5, sets.get(0).weightKg(), 0.0001);

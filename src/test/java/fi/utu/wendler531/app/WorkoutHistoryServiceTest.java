@@ -7,6 +7,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for {@link WorkoutHistoryService}.
+ */
 class WorkoutHistoryServiceTest {
 
     private final WorkoutHistoryService service = new WorkoutHistoryService();
@@ -53,7 +56,7 @@ class WorkoutHistoryServiceTest {
     }
 
     @Test
-    void findLatestForLift_returnsLatestByDateIso() {
+    void findLatestForLift_returnsLastAddedEntryForLift() {
         AppState state = AppState.defaultState();
         state.setWorkoutHistory(new ArrayList<>());
 
@@ -65,5 +68,19 @@ class WorkoutHistoryServiceTest {
         assertTrue(latestSquat.isPresent());
         assertEquals("2026-02-18", latestSquat.get().dateIso());
         assertEquals(2, latestSquat.get().week());
+    }
+
+    @Test
+    void findLatestForLift_returnsLastAddedEntryForLift_evenIfSameDateOrOutOfOrder() {
+        AppState state = AppState.defaultState();
+        state.setWorkoutHistory(new ArrayList<>());
+
+        // The last added matching entry should be treated as the latest one.
+        state.addWorkout(new WorkoutLogEntry("2026-02-18", LiftSettings.MainLift.SQUAT, 1, List.of(5, 5, 5)));
+        state.addWorkout(new WorkoutLogEntry("2026-02-18", LiftSettings.MainLift.SQUAT, 2, List.of(3, 3, 3)));
+
+        var latest = service.findLatestForLift(state, LiftSettings.MainLift.SQUAT);
+        assertTrue(latest.isPresent());
+        assertEquals(2, latest.get().week());
     }
 }
