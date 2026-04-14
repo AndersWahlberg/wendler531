@@ -524,11 +524,11 @@ public class ConsoleUI {
     }
 
     /**
-     * Prompts the user to add a new body weight entry.
+     * Prompts the user to add a new body weight entry. 
      */
     private void lisaaPaino() {
         section("Lisää paino");
-        double paino = readDoubleInRange("Syötä paino kilogrammoina: ", 1.0, 300.0);
+        double paino = readDoubleInRange("Syötä paino kilogrammoina: ", 30.0, 300.0);
         try {
             profile.addBodyWeightEntry(paino);
             saveState();
