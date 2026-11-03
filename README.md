@@ -116,28 +116,45 @@ This project includes the following required course elements:
 
 ## Build and run
 
-Run tests:
+### Requirements
+
+Before running the application, make sure you have installed:
+
+- Java JDK 17 or newer
+- Apache Maven
+
+### Run the application
+
+After cloning or downloading the repository, open a terminal in the project directory (where `pom.xml` is located).
+
+To compile and launch the application, run:
 
 ```bash
-mvn test
+mvn clean compile exec:java
 ```
 
-Build the project:
+**Important:** If you are running the application for the first time, use the command above instead of just `mvn exec:java`. The application must be compiled before Maven can find and execute the main class.
+
+### Build an executable JAR
+
+To package the application into an executable JAR file, run:
 
 ```bash
-mvn package
+mvn clean package
 ```
 
-Run the packaged application:
+Once the build succeeds, launch the application with:
 
 ```bash
 java -jar target/wendler531-1.0-SNAPSHOT.jar
 ```
 
-You can also run the application directly with Maven:
+### Run tests
+
+To execute the automated tests, run:
 
 ```bash
-mvn exec:java
+mvn test
 ```
 
 ## Tests
